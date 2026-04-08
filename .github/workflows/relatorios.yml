@@ -1,0 +1,51 @@
+name: Relatorios Automaticos InHouse
+
+on:
+  schedule:
+    # Roda todo dia às 12h UTC (9h BRT). Ajuste o horário se precisar.
+    - cron: '0 12 * * *'
+  workflow_dispatch:   # permite rodar manualmente pelo painel do GitHub Actions
+
+jobs:
+  enviar-relatorios:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependências
+        run: |
+          pip install pymysql pandas openpyxl snowflake-connector-python cryptography
+
+      - name: Escrever config.json
+        run: |
+          cat > config.json << 'EOF'
+          {
+            "mysql": {
+              "host": "34.70.28.234",
+              "user": "caique-cardoso-ro",
+              "password": "RQeoRdcwTkvpX2Ee",
+              "database": "neer_house_db"
+            },
+            "snowflake": {
+              "account": "APUJIET-CIA48409",
+              "user": "CAIQUECARDOSO",
+              "warehouse": "COMPUTE_WH",
+              "database": "INHOUSE_DW",
+              "private_key_file": "rsa_key.pem"
+            }
+          }
+          EOF
+
+      - name: Escrever RSA key do Snowflake
+        run: |
+          echo "${{ secrets.SNOWFLAKE_RSA_KEY }}" > rsa_key.pem
+
+      - name: Rodar robô de relatórios
+        run: python relatorios_automaticos_v2.py

@@ -1,0 +1,18 @@
+# Credenciais e chaves — nunca subir
+config.json
+rsa_key.pem
+rsa_key.pub
+
+# Arquivos de dados e outputs
+*.xlsx
+*.parquet
+*.log
+
+# Notebooks (rodam local, não no Actions)
+*.ipynb
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
