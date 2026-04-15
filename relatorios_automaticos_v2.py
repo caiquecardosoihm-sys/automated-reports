@@ -1,3 +1,4 @@
+import os
 import pymysql
 import pandas as pd
 import smtplib
@@ -261,8 +262,9 @@ def main():
     hoje = date.today()
 
     # Calendário automático: segunda-feira dispara SEMANAL, dia 1 do mês dispara MENSAL.
-    # Para forçar manualmente, mude para FORCAR_MODO = ["SEMANAL", "MENSAL"].
-    FORCAR_MODO = []
+    # Pode ser sobrescrito via variável de ambiente FORCAR_MODO=SEMANAL ou FORCAR_MODO=MENSAL
+    _env_modo = os.environ.get("FORCAR_MODO", "").strip().upper()
+    FORCAR_MODO = [_env_modo] if _env_modo else []
 
     modos_ativos = list(FORCAR_MODO) if FORCAR_MODO else []
     if not FORCAR_MODO:
