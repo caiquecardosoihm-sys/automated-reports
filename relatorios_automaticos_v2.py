@@ -312,6 +312,7 @@ def main():
             INNER JOIN stores   st ON s.store_id    = st.id
             INNER JOIN products p  ON si.product_id = p.id
             WHERE st.name LIKE '{like_pattern}'
+              AND s.status = 'paid'
               AND si.created_at >= '{dt_ini} 00:00:00'
               AND si.created_at <= '{dt_fim} 23:59:59'
             ORDER BY st.name, si.created_at DESC

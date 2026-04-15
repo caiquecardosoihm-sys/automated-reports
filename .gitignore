@@ -7,6 +7,17 @@ rsa_key.pub
 *.xlsx
 *.parquet
 *.log
+*.pdf
+*.csv
+
+# Snapshots e caches locais
+snapshots_planograma/
+raw_*.parquet
+
+# Scripts auxiliares / one-shot
+diagnostico_pascoa.py
+restaurar_snapshot_sp.py
+HANDOFF_*.md
 
 # Notebooks (rodam local, não no Actions)
 *.ipynb
