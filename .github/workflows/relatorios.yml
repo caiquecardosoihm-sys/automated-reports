@@ -60,9 +60,10 @@ jobs:
       - name: Conectar na VPN
         run: |
           echo "${{ secrets.OVPN_CONFIG }}" > vpn.ovpn
-          sudo openvpn --config vpn.ovpn --daemon --log /tmp/vpn.log
-          sleep 15
-          sudo cat /tmp/vpn.log | tail -5
+          printf "caique-ihm-stg\n${{ secrets.OVPN_PASSWORD }}\n" > vpn-auth.txt
+          sudo openvpn --config vpn.ovpn --auth-user-pass vpn-auth.txt --daemon --log /tmp/vpn.log
+          sleep 10
+          sudo cat /tmp/vpn.log | tail -10
 
       - name: Rodar robô de relatórios
         env:
