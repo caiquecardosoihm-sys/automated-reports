@@ -47,5 +47,17 @@ jobs:
         run: |
           echo "${{ secrets.SNOWFLAKE_RSA_KEY }}" > rsa_key.pem
 
+      - name: Instalar OpenVPN
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y openvpn
+
+      - name: Conectar na VPN
+        run: |
+          echo "${{ secrets.OVPN_CONFIG }}" > vpn.ovpn
+          sudo openvpn --config vpn.ovpn --daemon --log /tmp/vpn.log
+          sleep 15
+          sudo cat /tmp/vpn.log | tail -5
+
       - name: Rodar robô de relatórios
         run: python relatorios_automaticos_v2.py
